@@ -26,6 +26,7 @@ Due to relatively small data volume, ETL with Python is better suited for this p
 ###### The Process:
 After installing requirements.txt and modifying the Keys.py script, running the extract.py file should do the following:
 ![ExtractProcess.png](ExtractProcess.png)
+######
 Now the data sits  in  Azure Blob, no more API requests or webscraping is needed.
 ### 2. Transform the Data
 ###### Dimensional Modeling:
