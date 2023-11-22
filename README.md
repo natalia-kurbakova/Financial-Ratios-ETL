@@ -20,17 +20,25 @@ Due to relatively small data volume, ETL with Python is better suited for this p
 3. Yahoo Finance API
 ###### Before we start...
 1. Obtain a premium API key from  FMP: https://site.financialmodelingprep.com/developer/docs/pricing
-2. Copy you Azure Connection String (refer to "how-to-find-azure-storage-account-connection-string.pdf")
+2. Copy your Azure Connection String (refer to "how-to-find-azure-storage-account-connection-string.pdf")
 3. Paste both into Keys.py
 4. Install modules locally via terminal: "pip install -r requirements.txt"
 ###### The Process:
-After installing requirements.txt and modifying the Keys.py script, running the extract.py file should do the following:
+After installing requirements.txt and modifying the Keys.py script, running the **_extract.py_** file should do the following:
 ![ExtractProcess.png](ExtractProcess.png)
 ######
 Now the data sits  in  Azure Blob, no more API requests or webscraping is needed.
 ### 2. Transform the Data
-###### Dimensional Modeling:
+###### Dimensional Modeling - DbSchema
 In order to know what transformations need to be done to the files, we have to do data modeling. 
-For this step, DbSchema will do a good job in exporting the physical schema from the layout.
-
+For this step, DbSchema will do a good job in exporting the physical model from the layout.
+###### 
+The dimensional model follows the snowflake schema as shown below:
+![DimensionalModeling.png](DimensionalModeling.png)
+######
+Please follow the "how-to-generate-sql-schema-script.pdf" tutorial to generate your schema as a SQL file.
+###### Data Transformations:
+1. Adding key columns
+2. Changing datatypes to align with schema
+3. Creating a data dimension table
 
