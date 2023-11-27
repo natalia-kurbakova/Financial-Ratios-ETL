@@ -6,4 +6,3 @@ financetoolkit
 azure.storage.blob
 numpy
 datetime
-sqlalchemy

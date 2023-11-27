@@ -3,9 +3,11 @@ import numpy as np
 from datetime import datetime
 import Keys
 import os
+import uploadToAzureDataLake
 
 
-
+base_path = os.getcwd()
+file_path = os.path.join(base_path, r'csvFiles')
 
 def tickerToCompanyKey():
     os.environ['constituents_SAS'] = Keys.constituents_SAS_url
@@ -22,7 +24,9 @@ def clean_constituents():
     constituentsDF.rename(columns={'Symbol': 'TickerSymbol', 'Name': 'CompanyName', 'Sector': 'SectorName'},
                           inplace=True)
     constituentsDF = constituentsDF[['CompanyKey', 'TickerSymbol', 'CompanyName', 'SectorName']]
-    return constituentsDF
+    if not os.path.exists(f"{file_path}/clean_constituents.csv"):
+        return constituentsDF.to_csv(f"{file_path}/clean_constituents.csv", index=False)
+    # return constituentsDF
 
 
 def clean_sectors():
@@ -31,6 +35,8 @@ def clean_sectors():
     sectorsDF["IndustryKey"] = np.arange(1, len(sectorsDF) + 1).tolist()
     sectorsDF.rename(columns={'SectorNumber': 'SectorCode', 'Sector': 'SectorName'}, inplace=True)
     sectorsDF = sectorsDF[["IndustryKey", "SectorName", "SectorCode"]]
+    if not os.path.exists(f"{file_path}/clean_sectors.csv"):
+        sectorsDF.to_csv(f"{file_path}/clean_sectors.csv", index=False)
     return sectorsDF
 
 
@@ -87,6 +93,8 @@ def clean_ratios():
     ratiosDF2.sort_values(by=['CompanyKey', 'DateKey'], ascending=[True, True], ignore_index=True, inplace=True)
     ratiosDF2.drop_duplicates(inplace=True)
     ratiosDF2['WorkingCapital'] = ratiosDF2['WorkingCapital'].apply(int)
+    if not os.path.exists(f"{file_path}/clean_ratios.csv"):
+        ratiosDF2.to_csv(f"{file_path}/clean_ratios.csv", index=False)
     return ratiosDF2
 
 
@@ -104,6 +112,8 @@ def clean_stockprices():
     stockPerformanceDF = stockPerformanceDF[
         ['FactKey', 'DateKey', 'CompanyKey', 'OpenPrice', 'High', 'Low', 'ClosePrice', 'Volume']]
     stockPerformanceDF.round(2)
+    if not os.path.exists(f"{file_path}/clean_stock_performance.csv"):
+        stockPerformanceDF.to_csv(f"{file_path}/clean_stock_performance.csv", index=False)
     return stockPerformanceDF
 
 
@@ -118,11 +128,21 @@ def date_table():
     date_df["YearName"] = date_df['DateISO'].dt.year.apply(str)
     date_df["MonthName"] = date_df['DateISO'].dt.month.apply(str).str.zfill(2)
     date_df["MonthNumber"] = date_df["MonthName"].apply(int)
-    date_df["DayName"] = date_df['DateISO'].dt.month.apply(str).str.zfill(2)
+    date_df["DayName"] = date_df['DateISO'].dt.day.apply(str).str.zfill(2)
     date_df["DayNumber"] = date_df["DayName"].apply(int)
     date_df["DateKey"] = (date_df["YearName"] + date_df["MonthName"] + date_df["DayName"]).apply(int)
     date_df['QuarterNumber'] = [3 if x >= 7 else 1 if x <= 3 else 2 for x in date_df['MonthNumber']]
     date_df['QuarterName'] = date_df['QuarterNumber'].apply(str)
     date_df = date_df[['DateKey', 'DateISO', 'Year', 'QuarterNumber', 'QuarterName',
                        'MonthNumber', 'MonthName', 'DayNumber', 'DayName']]
+    if not os.path.exists(f"{file_path}/clean_dates.csv"):
+        date_df.to_csv(f"{file_path}/clean_dates.csv", index=False)
     return date_df
+
+def main():
+    clean_constituents()
+    clean_sectors()
+    clean_ratios()
+    clean_stockprices()
+    date_table()
+    uploadToAzureDataLake.uploadCSVtoBlob()
