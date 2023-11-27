@@ -1,0 +1,12 @@
+IndustryKey,SectorName,SectorCode
+1,Energy,10
+2,Materials,15
+3,Industrials,20
+4,Consumer Discretionary,25
+5,Consumer Staples,30
+6,Health Care,35
+7,Financials,40
+8,Information Technology,45
+9,Communication Services,50
+10,Utilities,55
+11,Real Estate,60
