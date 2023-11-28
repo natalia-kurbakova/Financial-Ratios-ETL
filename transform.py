@@ -26,7 +26,6 @@ def clean_constituents():
     constituentsDF = constituentsDF[['CompanyKey', 'TickerSymbol', 'CompanyName', 'SectorName']]
     if not os.path.exists(f"{file_path}/clean_constituents.csv"):
         return constituentsDF.to_csv(f"{file_path}/clean_constituents.csv", index=False)
-    # return constituentsDF
 
 
 def clean_sectors():
@@ -36,8 +35,7 @@ def clean_sectors():
     sectorsDF.rename(columns={'SectorNumber': 'SectorCode', 'Sector': 'SectorName'}, inplace=True)
     sectorsDF = sectorsDF[["IndustryKey", "SectorName", "SectorCode"]]
     if not os.path.exists(f"{file_path}/clean_sectors.csv"):
-        sectorsDF.to_csv(f"{file_path}/clean_sectors.csv", index=False)
-    return sectorsDF
+        return sectorsDF.to_csv(f"{file_path}/clean_sectors.csv", index=False)
 
 
 def clean_ratios():
@@ -94,8 +92,7 @@ def clean_ratios():
     ratiosDF2.drop_duplicates(inplace=True)
     ratiosDF2['WorkingCapital'] = ratiosDF2['WorkingCapital'].apply(int)
     if not os.path.exists(f"{file_path}/clean_ratios.csv"):
-        ratiosDF2.to_csv(f"{file_path}/clean_ratios.csv", index=False)
-    return ratiosDF2
+        return ratiosDF2.to_csv(f"{file_path}/clean_ratios.csv", index=False)
 
 
 def clean_stockprices():
@@ -113,8 +110,7 @@ def clean_stockprices():
         ['FactKey', 'DateKey', 'CompanyKey', 'OpenPrice', 'High', 'Low', 'ClosePrice', 'Volume']]
     stockPerformanceDF.round(2)
     if not os.path.exists(f"{file_path}/clean_stock_performance.csv"):
-        stockPerformanceDF.to_csv(f"{file_path}/clean_stock_performance.csv", index=False)
-    return stockPerformanceDF
+        return stockPerformanceDF.to_csv(f"{file_path}/clean_stock_performance.csv", index=False)
 
 
 def date_table():
@@ -136,8 +132,7 @@ def date_table():
     date_df = date_df[['DateKey', 'DateISO', 'Year', 'QuarterNumber', 'QuarterName',
                        'MonthNumber', 'MonthName', 'DayNumber', 'DayName']]
     if not os.path.exists(f"{file_path}/clean_dates.csv"):
-        date_df.to_csv(f"{file_path}/clean_dates.csv", index=False)
-    return date_df
+        return date_df.to_csv(f"{file_path}/clean_dates.csv", index=False)
 
 def main():
     clean_constituents()
